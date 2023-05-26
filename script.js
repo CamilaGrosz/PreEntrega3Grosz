@@ -1,76 +1,132 @@
-// Pagina que vende electronicos
+// Pagina que vende productos de electronica
+// arrayProductos
+// Elegir productos a comprar (most)
+// sumar precio productos
 
-// -stock de productos a la venta(productos)
-//  *Variable --> Contiene el stock
-// -eleccion del usuario(carrito)
-//      *Variables --> Items que eligio el user // Precio de los items
-//-Info a mostrar: Stock, carrito, precioCart (alerts)
-// -Info a recibir: eleccion del cliente (prompts)
-
-
-let stock = "1. Computadora Mac $1000USD \n 2. Iphone 11 $800USD \n 3. Ipods $500USD \n 4. IPad $900USD \n 0. Finalizar"
-let itemsSelected = "";
+// Variables
 let totalPrice = 0;
-let user = prompt("Ingresa tu nombre");
-let selected = parseInt(prompt(`Bienvenidx  ${user} \n Elegí los productos que deseas comprar marcando 1, 2, etc. (0 para finalizar) \n ${stock}`));
+let buys = [];
+let user = "";
 
+// Construccion de objetos
 
-function addProduct(product, price){
-    itemsSelected +=`${product} x1 \n`;
-    totalPrice += price;
-    alert(`Se agrego ${product} a tu compra`);
+class Product {
+    constructor(model, color, price, id){
+        this.model = model;
+        this.color = color;
+        this.price = price;
+        this.id = id;
+    }
 }
 
+const product1 = new Product ("MacBook Pro", "Blanco", 1000, 1);
+const product2 = new Product ("Iphone 11", "Negro", 800, 2);
+const product3 = new Product ("Air Pods 3", "Blanco", 500, 3);
+const product4 = new Product("ipad A1432", "Blanco", 900, 4)
+
+// Array contenedor de objetos
+const PRODUCTS = [product1, product2, product3, product4]
+
+
+// Inicio del programa. Se pide ingresar nombre del usuario y producto a elegir.
+
+function start(){
+    let user = prompt("Ingresa tu nombre");
+    this.user = user;
+    return printProducts(`Bienvenidx  ${user} \n Elegí los productos que deseas comprar marcando 1, 2, etc. (0 para finalizar) \n`)
+}
+
+function printProducts(message){
+    let products = message;
+    PRODUCTS.forEach(i => {
+        products += `${i.id}. Model: ${i.model} - Color: ${i.color} - Price: ${i.price}\n`
+    })
+    return products;
+}
+
+function selection(message){
+    let selected = parseInt(prompt(message)); 
+    selected = validateOpction(selected, message);
+    return PRODUCTS.find(i => i.id === selected)
+}
+
+// Funcion para cantidad de productos
+function amount(product){
+    let amount = parseInt(prompt("Cuanta cantidad desea llevar?"));
+    buys.push(`${amount} ${product.model} del color ${product.color} \n`)
+    return amount;
+}
+
+// Funcion para agregar un producto al carro
+function addProduct(product, amount){;
+    let amountProducts = amount;
+    while (amountProducts === 0){
+        alert("numero no válido, vuelva a ingresar")
+        amountProducts = amount(product)
+    }
+    if (amountProducts === 1) {
+        alert(`Se agrego ${product.model} a tu compra`);
+        totalPrice += product.price;
+    } else {
+        alert(`Se agregaron ${amountProducts} ${product.model} a tu compra`);
+        totalPrice += (product.price * amountProducts)
+    } 
+}
+
+// Funcion para preguntar si se quieren agregar mas productos
 function moreProducts(){
     let moreItems = (prompt(`${user} deseas agregar otro producto? \n A. SI \n B. NO`)).toLowerCase();
+    let productSelected = 0;
     while(moreItems != "a" && moreItems != "b"){
         alert("Ingrese una letra válida");
         moreItems = (prompt(`${user} deseas agregar otro producto? \n A. SI \n B. NO`)).toLowerCase();
     }
     if (moreItems == "a"){
-        selected = parseInt(prompt(`Elegí los productos que deseas comprar marcando 1, 2, etc. (0 para finalizar) \n ${stock}`));
-    } else {
-        selected = 0;
-    }
+        let message = printProducts(`Elegí los productos que deseas comprar marcando 1, 2, etc. (0 para finalizar) \n`);
+        productSelected = selection(message)  
+    } 
+    return productSelected;
+    
 }
 
+// Funcion para finalizar la compra
 function endOfShopp(){
     if (totalPrice == 0){
-        alert(`${user} lamentamos que no hayas comprado ningun producto, esperamos que vuelvas proximamente.`)
+        alert(`${this.user} lamentamos que no hayas comprado ningun producto, esperamos que vuelvas proximamente.`)
     } else {
-        alert(`${user} tu compra es de ${itemsSelected} por un precio total de ${totalPrice}`);
+        alert(`${this.user} tu compra es de \n${buys}Precio total: ${totalPrice}`);
         let dosCuo = Math.ceil(totalPrice / 2);
         let tresCuo = Math.ceil(totalPrice / 3);   
         let pago = parseInt(prompt(`¿Como desea pagar? Se puede pagar hasta 3 cuotas sin interes \n 1. Una couta de ${totalPrice} \n 2. Dos cuotas de ${dosCuo} \n 3. Tres cuotas de ${tresCuo} `))
         while (pago != 1 && pago != 2 && pago != 3){
             alert("Numero invalido, vuelva a ingresar")
             pago = parseInt(prompt(`¿Como desea pagar? Se puede pagar hasta 3 cuotas sin interes \n 1. Una couta de ${totalPrice} \n 2. Dos cuotas de ${dosCuo} \n 3. Tres cuotas de ${tresCuo} `))
-            }
         }
-        alert(`Gracias por confiar en nosotros, esperamos que disfrutes tu nueva compra`);
     }
+    alert(`Gracias por confiar en nosotros, esperamos que disfrutes tu nueva compra`);
+
+}
+
+// Funcion para validar opciones
+function validateOpction(number, message){
+    while(isNaN(number)){
+        alert("Ingresa un valor valido o 0 para finalizar la compra");
+        number = prompt(message);
+    }
+    return number;
 }
 
 
-while (selected != 0){
-    switch(selected){
-        case 1:
-            addProduct("Computadora Mac", 1000);
-            break;
-        case 2:
-            addProduct("Iphone 11", 800);
-            break; 
-        case 3:
-            addProduct("Ipods", 500)
-            break;
-        case 4:
-            addProduct("Ipad", 900)
-            break;
-        default:
-            alert("Ingresa un valor valido o 0 para finalizar la compra")      
-    }
-    moreProducts();
+const startBuy = start();
+let productSelected = selection(startBuy);
+while (productSelected != 0) {
+    let amountProducts = amount(productSelected);
+    addProduct(productSelected, amountProducts)
+    productSelected = moreProducts();
 }
+
+
+// Fin de la compra
 endOfShopp();
 
 
