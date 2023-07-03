@@ -1,0 +1,26 @@
+{
+    "products" : [
+        {
+            "name": "Iphone 11",
+            "price": 800,
+            "id": 1
+        },
+        {
+            "name": "MacBook Pro",
+            "price": 1000,
+            "id": 2
+        },
+        {
+            "name": "Air Pods 3",
+            "price": 500,
+            "id": 3
+        },
+        {
+            "name": "ipad A1432",
+            "price": 900,
+            "id": 4
+        }
+        
+    ]
+
+}
