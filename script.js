@@ -1,20 +1,3 @@
-class Product {
-  constructor(name, price, id, description){
-      this.name = name;
-      this.price = price;
-      this.id = id;
-      this.description = description;
-  }
-}
-
-
-
-
-// const product2 = new Product ("Iphone 11", 800, 2, "El sucesor del iPhone XR llega con una cámara doble que apuesta por el gran angular y deja a un lado el zoom, el mismo procesador que los nameos 'pro', un diseño más desenfadado en nuevos tonos y, sobre todo, un precio mucho más atractivo.");
-// const product1 = new Product ("MacBook Pro", 1000, 1, "Estos equipos integran los nuevos procesadores Apple M1, y prometen casi el triple de rendimiento gracias a estos potentes SoC. No solo eso: la eficiencia de estos procesadores también permite a estos equipos presumir de una autonomía sin precedentes: hasta 20 horas de reproducción de vídeo, 10 horas más que su generación anterior y toda una garantía para quienes los usen en el día a día.");
-// const product3 = new Product ("Air Pods 3", 500, 3, "30 horas de autonomía y soporte para 'Spatial Audio', su tecnología de sonido envolvente. Además de la mejora en sonido, los nuevos AirPods vienen con cambios en el diseño y son resistentes al agua y al sudor, con certificación IPX4. Estas son las características de los nuevos auriculares completamente inalámbricos (TWS) de Apple.");
-// const product4 = new Product("ipad A1432", 900, 4, "Es un tablet iOS con procesador mediano de 1GHz Dual-core que realiza bien las funciones del Apple iPad mini (WiFi 16GB). Buena conectividad de este terminal que incluye Bluetooth 4.0 + A2DP, WiFi 802.11 a/b/g/n (2.4GHz, 5GHz), pero carece de conexión NFC. Incluyendo la batería, el tablet Apple iPad mini (WiFi 16GB) tiene 308 gramos y es un terminal muy delgado con solamente 7,2mm.")
-
 class User {
   constructor(user, password){
       this.user = user;
@@ -22,12 +5,7 @@ class User {
   }
 }
 
-
-
-
 const USERS = []
-
-
 const PRODUCTS = [];
 
 const products = async () => {
@@ -47,8 +25,9 @@ const products = async () => {
     console.error('Error:', error);
   }
 };
+// Llamada a la función para ejecutarla
 
-products(); // Llamada a la función para ejecutarla
+products(); 
 
 
 // Comienzo, al tocar Log In se abre el formulario con el user y contraseña
@@ -111,9 +90,6 @@ formLogIn.onsubmit = (e) => {
 }
 
 
-
-
-// Al tocar el boton se
 btnKeepShop.onclick = () => {
   divBuy.style.display = "flex"
 }
@@ -122,11 +98,7 @@ btnKeepShop.onclick = () => {
 // Funcion para mostrar contraseña
 function showPassword(){
   let userPassw = document.getElementById("userPassword")
-  if (userPassw.type == "password"){
-    userPassw.type = "text";
-  }else{
-    userPassw.type = "password"
-  }
+  userPassw.type == "password" ?  userPassw.type = "text" : userPassw.type = "password"
 }
 showPass.onclick = () => {showPassword()}
 
@@ -142,7 +114,7 @@ formData.onsubmit = (e) => {
     localStorage.setItem("userMail", userMail.value);
     userCity.value = dataUserRegis.querySelector("#userCity").value;
     localStorage.setItem("userCity", userCity.value);
-    let gridCheck = dataUserRegis.querySelector("#gridCheck").value;
+    let gridCheck = dataUserRegis.querySelector("#gridCheck").value; 
     if (gridCheck !== "on") {
       btnStartShop.disabled = true;
     }
