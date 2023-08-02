@@ -41,18 +41,27 @@ const getProducts = async () => {
 
 
 ( async () => {
+  // Una vez que los productos se carguen al array se crearan las demas secciones
   await getProducts()
   createLogInSection();
   createLogInForm();
   createDivFormData();
   createStartBuy();
+
+  // Resto del codigo que depende de la creacion de las secciones
+
+
   const cartBuys = document.getElementById("cartBuys")
   const btnLogInShow = document.getElementById("btnLogInShow")
   const formLogIn = document.getElementById("formLogIn")
+
+  // Al apretar el log In muestra el formulario para ingresar
   btnLogInShow.onclick = () => {
     btnLogInShow.style.display = "none";
     formLogIn.style.display = "flex"
   };
+
+  // Al submitir los datos se agregan al local storage
   formLogIn.onsubmit = (e) => {
     e.preventDefault()
     let dataUser = e.target
@@ -65,8 +74,7 @@ const getProducts = async () => {
       USERS.push(user);
     })();  
   }
-  
-  const btnKeepShop = document.getElementById("btnKeepShop")
+
   const startBuyDiv = document.getElementById("startBuyDiv")
   const btnSubmit = document.getElementById("btnSubmit")
   const divFormData = document.getElementById("divFormData")
@@ -98,8 +106,6 @@ const getProducts = async () => {
   btnBuy.onclick = () => {
     showCart()
   } 
-
-  const userPassword = document.getElementById("userPassword");
 
   const stopBuyingButton = document.getElementById('stopBuying');
   stopBuyingButton.addEventListener('click', function () {
@@ -138,7 +144,7 @@ const getProducts = async () => {
 
 
 
-
+// Funcion para crear elementos html a partir del padre, tipo de elemento, atributos y contenido
 function createAndAppend(parent, elementType, attributes = {}, textContent = "") {
   const element = document.createElement(elementType);
   Object.entries(attributes).forEach(([attr, value]) => element.setAttribute(attr, value));
@@ -147,6 +153,7 @@ function createAndAppend(parent, elementType, attributes = {}, textContent = "")
   return element;
 }
 
+// Funcion que crea la seccion LogIn
 function createLogInSection() {
   const logInSection = createAndAppend(document.body, "section", { id: "logInSection" });
   createAndAppend(logInSection, "h1", { id: "title" }, "Apple Store");
@@ -157,8 +164,7 @@ function createLogInSection() {
   }, "Log In");
 }
 
-
-
+// Funcion que crea el logIn
 function createLogInForm() {
   const formLogIn = createAndAppend(document.body, "form", { id: "formLogIn", style: "display:none" });
   createAndAppend(formLogIn, "span", { class: "input-group-text", id: "formText" }, "Inserte nombre de usuario y contraseña");
@@ -172,8 +178,7 @@ function createLogInForm() {
   };
 }
 
-
-
+// Funcion que crea formulario
 function createDivFormData() {
   const divFormData = createAndAppend(document.body, "div", { id: "divFormData" });
   const formData = createAndAppend(divFormData, "form", { class: "row g-3", id: "formData", style: "display:none" });
@@ -207,7 +212,7 @@ function createDivFormData() {
   };
 }
 
-// Function to create the start buy section
+// Function que crea la seccion de compra
 function createStartBuy() {
   const startBuyDiv = createAndAppend(document.body, "div", { id: "startBuyDiv", style: "display: none;" });
   const startBuyHTML = `
@@ -236,9 +241,7 @@ function createStartBuy() {
   products();
 }
 
-
-// Funcion para mostrar contraseña
-
+// Funcion agregar productos al select
 function products(){
   const productSelect = document.getElementById("productSelect")
   PRODUCTS.forEach((product) => {
@@ -271,7 +274,7 @@ function products(){
   });
 }
 
-
+// Funcion mostrar carrito
 function showCart(){
   cartBuys.innerHTML = ''
   let storedCardData = localStorage.getItem('cart')
@@ -287,13 +290,13 @@ function showCart(){
   cartBuys.appendChild(ulElement);
 }
 
-
-
+// Funcion actualizar precio
 function updateTotalPrice() {
   const totalPriceElement = document.getElementById('totalPrice');
   totalPriceElement.textContent = 'Precio total: $' + totalPrice.toFixed(2);
 }
 
+// Funcion calcular precio
 function calculateTotalPrice() {
   let total = 0;
   cart.forEach((item) => {
@@ -302,7 +305,7 @@ function calculateTotalPrice() {
   return total;
 }
 
-
+// Funcion final de la compra
 function endOfShopp() {
   const buyText = document.createElement('p');
   buyText.classList.add('fs-5');
