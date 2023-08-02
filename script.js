@@ -19,15 +19,33 @@ const PRODUCTS = [];
 let cardData = {};
 let cart = [];
 let totalPrice = 0;
-const btnKeepShop = document.getElementById("btnKeepShop")
-const cartBuys = document.getElementById("cartBuys")
 let userName = "";
+
+const products = async () => {
+  try {
+    const result = await fetch('./products.json');
+    const data = await result.json();
+    data.products.forEach(e => {
+      let objeto = {
+        name: e.name,
+        price: e.price,
+        id: e.id
+      }
+      PRODUCTS.push(objeto);
+    });
+  } catch (error) {
+  console.error('Error:', error);
+  }
+};
+products(); 
 
 createLogInSection();
 createLogInForm();
 createDivFormData();
 createStartBuy();
 
+
+const cartBuys = document.getElementById("cartBuys")
 
 
 function createAndAppend(parent, elementType, attributes = {}, textContent = "") {
@@ -72,47 +90,38 @@ formLogIn.onsubmit = (e) => {
   e.preventDefault()
   let dataUser = e.target
   const userNameForm = dataUser.querySelector("#userName").value
+  const userPass = dataUser.querySelector("#userPassword").value
   let userCoinsidence = USERS.find(e => e.userNameForm == userName)
   userName = userNameForm
   userCoinsidence  === undefined && (() => {
     const user = new User(userNameForm, userPass);
     USERS.push(user);
   })();  
-  const products = async () => {
-    try {
-      const result = await fetch('./products.json');
-      const data = await result.json();
-      data.products.forEach(e => {
-        let objeto = {
-          name: e.name,
-          price: e.price,
-          id: e.id
-    };
-    PRODUCTS.push(objeto);
-    });
-    console.log(PRODUCTS);
-    } catch (error) {
-    console.error('Error:', error);
-    }
-  };
-  products(); 
 }
 
+const btnKeepShop = document.getElementById("btnKeepShop")
+const startBuyDiv = document.getElementById("startBuyDiv")
 const btnSubmit = document.getElementById("btnSubmit")
+const divFormData = document.getElementById("divFormData")
+
 btnSubmit.onclick = () => {
   let userSL = localStorage.getItem("userName")
   userSL === null ? (() => {
     localStorage.setItem("userName", userName)
     const messageFormData = createAndAppend(divFormData, "p", { id: "messageFormData" });
     messageFormData.innerText = "Bienvenidx " + userName +". Como es tu primera vez ingresa tus datos"
-    createDivFormData()
+    divFormData.style.display = "flex"
   })() : (() => {
     const welcomeBack = createAndAppend(divFormData, "p", { id: "welcomeBack" });
+    const btnKeepShop = createAndAppend(divFormData, "button", { type: "button", class: "btn btn-outline-secondary", id: "btnKeepShop" }, "Seguir comprando");
     welcomeBack.innerText = "Bienvenidx de nuevo " + userName
+    startBuyDiv.style.display = "flex"
     btnKeepShop.style.display = "flex"
     cartBuys.style.display = "flex";
     formLogIn.style.display = "none"
-    startBuy()
+    btnKeepShop.onclick = () => {
+      startBuyDiv.style.display = "flex"
+    }
     showCart()
   }) ();
   formLogIn.style.display = "none"
@@ -141,21 +150,19 @@ function createDivFormData() {
   `;
   formData.innerHTML = newFormHTML;
   
-  createStartBuy()
-  const startBuy = document.getElementById("startBuy")
   const btnStartShop = document.getElementById("btnStartShop");
   const logInSection = document.getElementById("logInSection");
 
   btnStartShop.onclick = () => {
     e.preventDefault()
     logInSection.style.display = "none";
-    startBuy.style.display = "flex !important"
+    startBuyDiv.style.display = "flex !important"
   };
 }
 
 // Function to create the start buy section
 function createStartBuy() {
-  const startBuy = createAndAppend(document.body, "div", { id: "startBuy", style: "display: none;" });
+  const startBuyDiv = createAndAppend(document.body, "div", { id: "startBuyDiv", style: "display: none;" });
   const startBuyHTML = `
   <form id="productForm">
     <select class="form-select form-select-lg mb-3" id="productSelect">
@@ -178,60 +185,19 @@ function createStartBuy() {
     <button id="cancelBuy" class="btn btn-outline-secondary">Cancelar compra</button>
   </div>
   `;     
-  startBuy.innerHTML = startBuyHTML;
-}
-
-
-// Funcion para mostrar contraseña
-const userPassword = document.getElementById("userPassword");
-function showPassword() {
-  
-}
-
-// Al tocar el boton se
-btnKeepShop.onclick = () => {
-  startBuy.style.display = "flex"
-}
-
-const btnBuy = document.getElementById("btnBuy")
-btnBuy.onclick = () => {
-  showCart()
-} 
-
-const stopBuyingButton = document.getElementById('stopBuying');
-stopBuyingButton.addEventListener('click', function () {
-  startBuy.style.display = "none";
-  cartBuys.innerHTML.trim() === '' ? showCart() : (() => {
-    cartBuys.innerHTML = '';
-    showCart();
-  })
-  endOfShopp()
-  updateTotalPrice();
-});
-
-// Al submitir el form se guardan los valores (no todos se usan, es para agregar mas interacción)
-formData.onsubmit = (e) => {
-  e.preventDefault();
-  let dataUserRegis = e.target;
-  formData.style.display = "none";
-  userMail.value = dataUserRegis.querySelector("#userMail").value;
-  localStorage.setItem("userMail", userMail.value);
-  const startBuy = document.getElementById("startBuy")
-  startBuy.style
-}
-
-function startBuy() {
-  const productSelect = document.getElementById('productSelect');
+  startBuyDiv.innerHTML = startBuyHTML;
+  const productSelect = document.getElementById("productSelect")
   PRODUCTS.forEach((product) => {
     const option = document.createElement('option');
     option.value = product.id;
     option.textContent = product.name;
     productSelect.appendChild(option);
   });
+  
   const productForm = document.getElementById('productForm');
   productForm.addEventListener('submit', function (event) {
     event.preventDefault();
-    startBuy.style.display = "flex";
+    startBuyDiv.style.display = "flex";
     const selectedProductId = productSelect.value;
     const selectedProduct = PRODUCTS.find((product) => product.id === parseInt(selectedProductId));
     const selectedColor = document.getElementById('productColor').value;
@@ -250,6 +216,44 @@ function startBuy() {
     })();
   });
 }
+
+
+// Funcion para mostrar contraseña
+const userPassword = document.getElementById("userPassword");
+function showPassword() {
+  
+}
+
+
+
+
+const btnBuy = document.getElementById("btnBuy")
+btnBuy.onclick = () => {
+  showCart()
+} 
+
+const stopBuyingButton = document.getElementById('stopBuying');
+stopBuyingButton.addEventListener('click', function () {
+  startBuyDiv.style.display = "none";
+  cartBuys.innerHTML.trim() === '' ? showCart() : (() => {
+    cartBuys.innerHTML = '';
+    showCart();
+  })
+  endOfShopp()
+  updateTotalPrice();
+});
+
+// Al submitir el form se guardan los valores (no todos se usan, es para agregar mas interacción)
+formData.onsubmit = (e) => {
+  e.preventDefault();
+  let dataUserRegis = e.target;
+  formData.style.display = "none";
+  userMail.value = dataUserRegis.querySelector("#userMail").value;
+  localStorage.setItem("userMail", userMail.value);
+  startBuyDiv.style.display = "flex"
+}
+const productSelect = document.getElementById('productSelect');
+
 
 function showCart(){
   cartBuys.innerHTML = ''
@@ -275,7 +279,7 @@ cancelBuyButton.addEventListener('click', function () {
   const totalBuyElement = document.getElementById('totalBuy');
   totalBuyElement.innerHTML = '';
   console.log('Compra cancelada');
-  startBuy.style.display = "none";
+  startBuyDiv.style.display = "none";
   cartBuys.innerHTML = '';
 });
 
@@ -324,7 +328,7 @@ function endOfShopp() {
         Swal.fire({
           position: 'top-end',
           title: 'Compra realizada',
-          text: `El pedido será enviado a la dirección ${userAddressLocal} de la ciudad de ${userCityLocal}. Se le notificará por el correo electrónico ${userMailLocal} la fecha y estimado horario de entrega. Recuerde que el pedido se abona en efectivo.`,
+          text: `Se le notificará por el correo electrónico ${userMailLocal} la fecha y estimado horario de entrega. Recuerde que el pedido se abona en efectivo.`,
           showConfirmButton: false,
           timer: 15000
         })
