@@ -36,8 +36,8 @@ const products = async () => {
   } catch (error) {
   console.error('Error:', error);
   }
+  products(); 
 };
-products(); 
 
 createLogInSection();
 createLogInForm();
