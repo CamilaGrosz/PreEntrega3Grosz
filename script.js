@@ -21,7 +21,7 @@ let cart = [];
 let totalPrice = 0;
 let userName = "";
 
-const products = async () => {
+const getProducts = async () => {
   try {
     const result = await fetch('./products.json');
     const data = await result.json();
@@ -32,13 +32,14 @@ const products = async () => {
         id: e.id
       }
       PRODUCTS.push(objeto);
+      console.log(PRODUCTS)
     });
   } catch (error) {
   console.error('Error:', error);
-  }
-  products(); 
-};
+  } 
+}
 
+getProducts()
 createLogInSection();
 createLogInForm();
 createDivFormData();
@@ -186,6 +187,17 @@ function createStartBuy() {
   </div>
   `;     
   startBuyDiv.innerHTML = startBuyHTML;
+  products();
+}
+
+
+// Funcion para mostrar contraseña
+const userPassword = document.getElementById("userPassword");
+function showPassword() {
+  
+}
+
+function products(){
   const productSelect = document.getElementById("productSelect")
   PRODUCTS.forEach((product) => {
     const option = document.createElement('option');
@@ -216,15 +228,6 @@ function createStartBuy() {
     })();
   });
 }
-
-
-// Funcion para mostrar contraseña
-const userPassword = document.getElementById("userPassword");
-function showPassword() {
-  
-}
-
-
 
 
 const btnBuy = document.getElementById("btnBuy")
