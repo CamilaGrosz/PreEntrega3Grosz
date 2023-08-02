@@ -12,138 +12,17 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 <body>
-  <section id="logInSection">
-    <h1 id="title">Apple Store</h1>
-    <button type="button" class="btn btn-outline-secondary" id="btnLogInShow">Log In</button>
-  </section>
- 
-  <form action="" id="formLogIn" style="display:none">
-    <span class="input-group-text" id="formText">Inserte nombre de usuario y contraseña</span>
-    <input type="text" aria-label="Usuario" class="form-control" id="userName" required>
-    <input type="password" aria-label="Contraseña" class="form-control" id="userPassword" required>        
-    <div id="formButtons">
-      <button type="button" class="btn btn-outline-secondary" id="showPass">Mostrar contraseña</button>
-      <button type="submit" class="btn btn-outline-secondary" id="btnSubmit">Ingresar</button>
-    </div>
-  </form>
+
+  <div id="divFormData"></div>
 
 
 
 
-  <div id="divFormData">
-    <form class="row g-3" id="formData" style="display:none">
-      <h2 id="messageFormData"></h2>
-      <div class="col-md-6">
-        <label for="inputEmail4" class="form-label">Nombre</label>
-        <input type="text" class="input-group-text" id="inputEmail4" required>
-      </div>
-      <div class="col-md-6">
-        <label for="inputPassword4" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" id="inputPassword4">
-      </div>
-      <div class="col-12">
-        <label for="inputAddress" class="form-label" id="">Mail</label>
-        <input type="email" class="form-control" id="userMail" placeholder="abcde@mail.com" required>
-      </div>
-      <div class="col-12">
-        <label for="inputAddress" class="form-label" id="">Direccion</label>
-        <input type="text" class="form-control" id="userDirec" placeholder="1234 San Martin" required>
-      </div>
-      <div class="col-md-4">
-        <label for="inputState" class="form-label" id="">Provincia</label>
-        <select id="userProv" class="form-select" style="color: black;" placeholder="Tu provincia" required>
-          <option selected>Choose...</option>
-          <option>Buenos Aires</option>
-          <option value="">Córdoba</option>
-          <option value="">Catamarca</option>
-          <option value="">Chaco</option>
-          <option value="">Chubut</option>
-          <option value="">Corrientes</option>
-          <option value="">Entre Rios</option>
-          <option value="">Formosa</option>
-          <option value="">Jujuy</option>
-          <option value="">La Pampa</option>
-          <option value="">La Rioja</option>
-          <option value="">Mendoza</option>
-          <option value="">Misiones</option>
-          <option value="">Neuquén</option>
-          <option value="">Río Negro</option>
-          <option value="">Salta</option>
-          <option value="">San Juan</option>
-          <option value="">San Luis</option>
-          <option value="">Santa Cruz</option>
-          <option value="">Santa Fe</option>
-          <option value="">Santiago del Estero</option>
-          <option value="">Tierra del fuego</option>
-          <option value="">Tucumán</option>
-        </select>
-      </div>
-      <div class="col-md-6">
-        <label for="inputCity" class="form-label" id="" >Ciudad</label>
-        <input type="text" class="form-control" id="userCity" placeholder="Tu Ciudad" required>
-      </div>
-      <div class="col-md-2">
-        <label for="inputZip" class="form-label" id="">Zip</label>
-        <input type="text" class="form-control" id="userZip" placeholder="1234" required>
-      </div>
-      <div class="col-md-6" id="lastInputForm">
-        <label for="inputCity" class="form-label" id="">Barrio/ Localidad</label>
-        <input type="text" class="form-control" id="userBarr" placeholder="Tu Barrio/Localidad" required>
-      </div>
-      <div class="col-12">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="gridCheck" style="background-color: grey;" required>
-          <label class="form-check-label" for="gridCheck" id="userNotif">
-            Terminos y condiciones
-          </label>
-        </div>
-      </div>
-      <div class="col-12">
-        <button type="submit" class="btn btn-outline-secondary" id="btnStartShop">Comenzar compra</button>
-      </div>
-    </form>
-  </div>
-  <h2 id="welcomeBack"></h2>
- 
- 
-  <button type="button" class="btn btn-outline-secondary" id="btnKeepShop" style="display: none;">Comenzar compra</button>
- 
-  <div id="startBuy" style="display: none;">
-    <form id="productForm">
-      <select class="form-select form-select-lg mb-3" id="productSelect">
-        <option selected>Elija el producto</option>
-      </select>
-      <p id="productDescription"></p>
-      <select class="form-select form-select-sm" id="productColor">
-        <option selected>Elija el color</option>
-        <option>Blanco</option>
-        <option>Negro</option>
-        <option>Rosa</option>
-        <option>Azul</option>
-      </select>
-      <input type="number" class="form-control" placeholder="Cantidad" id="productQuantity">
-      <button type="submit" class="btn btn-outline-secondary" id="btnBuy">Comprar</button>
-     
-      <p id="totalPrice"></p>
-    </form>
-    <div id="buyButtons">
-      <button id="stopBuying" class="btn btn-outline-secondary">Finalizar compra</button>
-      <button id="cancelBuy" class="btn btn-outline-secondary">Cancelar compra</button>
-    </div>
-  </div>
-
-
-
-
-  <p id="totalBuy"></p>
-
-
-  <div class="card" style="width: 18rem;" id="cartBuys">
-  </div>
+  <div class="card" style="width: 18rem;" id="cartBuys"></div>
 
   <script src="script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script> -->
 
 
 </body>
