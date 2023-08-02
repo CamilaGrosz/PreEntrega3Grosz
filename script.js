@@ -39,14 +39,104 @@ const getProducts = async () => {
   } 
 }
 
-getProducts()
-createLogInSection();
-createLogInForm();
-createDivFormData();
-createStartBuy();
+
+( async () => {
+  await getProducts()
+  createLogInSection();
+  createLogInForm();
+  createDivFormData();
+  createStartBuy();
+  const cartBuys = document.getElementById("cartBuys")
+  const btnLogInShow = document.getElementById("btnLogInShow")
+  const formLogIn = document.getElementById("formLogIn")
+  btnLogInShow.onclick = () => {
+    btnLogInShow.style.display = "none";
+    formLogIn.style.display = "flex"
+  };
+  formLogIn.onsubmit = (e) => {
+    e.preventDefault()
+    let dataUser = e.target
+    const userNameForm = dataUser.querySelector("#userName").value
+    const userPass = dataUser.querySelector("#userPassword").value
+    let userCoinsidence = USERS.find(e => e.userNameForm == userName)
+    userName = userNameForm
+    userCoinsidence  === undefined && (() => {
+      const user = new User(userNameForm, userPass);
+      USERS.push(user);
+    })();  
+  }
+  
+  const btnKeepShop = document.getElementById("btnKeepShop")
+  const startBuyDiv = document.getElementById("startBuyDiv")
+  const btnSubmit = document.getElementById("btnSubmit")
+  const divFormData = document.getElementById("divFormData")
+  
+  btnSubmit.onclick = () => {
+    let userSL = localStorage.getItem("userName")
+    userSL === null ? (() => {
+      localStorage.setItem("userName", userName)
+      const messageFormData = createAndAppend(divFormData, "p", { id: "messageFormData" });
+      messageFormData.innerText = "Bienvenidx " + userName +". Como es tu primera vez ingresa tus datos"
+      divFormData.style.display = "flex"
+    })() : (() => {
+      const welcomeBack = createAndAppend(divFormData, "p", { id: "welcomeBack" });
+      const btnKeepShop = createAndAppend(divFormData, "button", { type: "button", class: "btn btn-outline-secondary", id: "btnKeepShop" }, "Seguir comprando");
+      welcomeBack.innerText = "Bienvenidx de nuevo " + userName
+      startBuyDiv.style.display = "flex"
+      btnKeepShop.style.display = "flex"
+      cartBuys.style.display = "flex";
+      formLogIn.style.display = "none"
+      btnKeepShop.onclick = () => {
+        startBuyDiv.style.display = "flex"
+      }
+      showCart()
+    }) ();
+    formLogIn.style.display = "none"
+  }
+
+  const btnBuy = document.getElementById("btnBuy")
+  btnBuy.onclick = () => {
+    showCart()
+  } 
+
+  const userPassword = document.getElementById("userPassword");
+
+  const stopBuyingButton = document.getElementById('stopBuying');
+  stopBuyingButton.addEventListener('click', function () {
+    startBuyDiv.style.display = "none";
+    cartBuys.innerHTML.trim() === '' ? showCart() : (() => {
+      cartBuys.innerHTML = '';
+      showCart();
+    })
+    endOfShopp()
+    updateTotalPrice();
+  });
+
+  // Al submitir el form se guardan los valores (no todos se usan, es para agregar mas interacción)
+  formData.onsubmit = (e) => {
+    e.preventDefault();
+    let dataUserRegis = e.target;
+    formData.style.display = "none";
+    userMail.value = dataUserRegis.querySelector("#userMail").value;
+    localStorage.setItem("userMail", userMail.value);
+    startBuyDiv.style.display = "flex"
+  }
+  const productSelect = document.getElementById('productSelect');
+  const cancelBuyButton = document.getElementById('cancelBuy');
+  cancelBuyButton.addEventListener('click', function () {
+    cart = [];
+    localStorage.removeItem('cart');
+    totalPrice = 0;
+    updateTotalPrice();
+    const totalBuyElement = document.getElementById('totalBuy');
+    totalBuyElement.innerHTML = '';
+    console.log('Compra cancelada');
+    startBuyDiv.style.display = "none";
+    cartBuys.innerHTML = '';
+  });
+})();
 
 
-const cartBuys = document.getElementById("cartBuys")
 
 
 function createAndAppend(parent, elementType, attributes = {}, textContent = "") {
@@ -67,12 +157,7 @@ function createLogInSection() {
   }, "Log In");
 }
 
-const btnLogInShow = document.getElementById("btnLogInShow")
-const formLogIn = document.getElementById("formLogIn")
-btnLogInShow.onclick = () => {
-  btnLogInShow.style.display = "none";
-  formLogIn.style.display = "flex"
-};
+
 
 function createLogInForm() {
   const formLogIn = createAndAppend(document.body, "form", { id: "formLogIn", style: "display:none" });
@@ -87,46 +172,7 @@ function createLogInForm() {
   };
 }
 
-formLogIn.onsubmit = (e) => {
-  e.preventDefault()
-  let dataUser = e.target
-  const userNameForm = dataUser.querySelector("#userName").value
-  const userPass = dataUser.querySelector("#userPassword").value
-  let userCoinsidence = USERS.find(e => e.userNameForm == userName)
-  userName = userNameForm
-  userCoinsidence  === undefined && (() => {
-    const user = new User(userNameForm, userPass);
-    USERS.push(user);
-  })();  
-}
 
-const btnKeepShop = document.getElementById("btnKeepShop")
-const startBuyDiv = document.getElementById("startBuyDiv")
-const btnSubmit = document.getElementById("btnSubmit")
-const divFormData = document.getElementById("divFormData")
-
-btnSubmit.onclick = () => {
-  let userSL = localStorage.getItem("userName")
-  userSL === null ? (() => {
-    localStorage.setItem("userName", userName)
-    const messageFormData = createAndAppend(divFormData, "p", { id: "messageFormData" });
-    messageFormData.innerText = "Bienvenidx " + userName +". Como es tu primera vez ingresa tus datos"
-    divFormData.style.display = "flex"
-  })() : (() => {
-    const welcomeBack = createAndAppend(divFormData, "p", { id: "welcomeBack" });
-    const btnKeepShop = createAndAppend(divFormData, "button", { type: "button", class: "btn btn-outline-secondary", id: "btnKeepShop" }, "Seguir comprando");
-    welcomeBack.innerText = "Bienvenidx de nuevo " + userName
-    startBuyDiv.style.display = "flex"
-    btnKeepShop.style.display = "flex"
-    cartBuys.style.display = "flex";
-    formLogIn.style.display = "none"
-    btnKeepShop.onclick = () => {
-      startBuyDiv.style.display = "flex"
-    }
-    showCart()
-  }) ();
-  formLogIn.style.display = "none"
-}
 
 function createDivFormData() {
   const divFormData = createAndAppend(document.body, "div", { id: "divFormData" });
@@ -192,10 +238,6 @@ function createStartBuy() {
 
 
 // Funcion para mostrar contraseña
-const userPassword = document.getElementById("userPassword");
-function showPassword() {
-  
-}
 
 function products(){
   const productSelect = document.getElementById("productSelect")
@@ -230,34 +272,6 @@ function products(){
 }
 
 
-const btnBuy = document.getElementById("btnBuy")
-btnBuy.onclick = () => {
-  showCart()
-} 
-
-const stopBuyingButton = document.getElementById('stopBuying');
-stopBuyingButton.addEventListener('click', function () {
-  startBuyDiv.style.display = "none";
-  cartBuys.innerHTML.trim() === '' ? showCart() : (() => {
-    cartBuys.innerHTML = '';
-    showCart();
-  })
-  endOfShopp()
-  updateTotalPrice();
-});
-
-// Al submitir el form se guardan los valores (no todos se usan, es para agregar mas interacción)
-formData.onsubmit = (e) => {
-  e.preventDefault();
-  let dataUserRegis = e.target;
-  formData.style.display = "none";
-  userMail.value = dataUserRegis.querySelector("#userMail").value;
-  localStorage.setItem("userMail", userMail.value);
-  startBuyDiv.style.display = "flex"
-}
-const productSelect = document.getElementById('productSelect');
-
-
 function showCart(){
   cartBuys.innerHTML = ''
   let storedCardData = localStorage.getItem('cart')
@@ -273,18 +287,7 @@ function showCart(){
   cartBuys.appendChild(ulElement);
 }
 
-const cancelBuyButton = document.getElementById('cancelBuy');
-cancelBuyButton.addEventListener('click', function () {
-  cart = [];
-  localStorage.removeItem('cart');
-  totalPrice = 0;
-  updateTotalPrice();
-  const totalBuyElement = document.getElementById('totalBuy');
-  totalBuyElement.innerHTML = '';
-  console.log('Compra cancelada');
-  startBuyDiv.style.display = "none";
-  cartBuys.innerHTML = '';
-});
+
 
 function updateTotalPrice() {
   const totalPriceElement = document.getElementById('totalPrice');
@@ -303,9 +306,6 @@ function calculateTotalPrice() {
 function endOfShopp() {
   const buyText = document.createElement('p');
   buyText.classList.add('fs-5');
-  const userAddressLocal = localStorage.getItem("userAddress");
-  const userCityLocal = localStorage.getItem("userCity");
-  const userMailLocal = localStorage.getItem("userMail");
   const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -331,7 +331,7 @@ function endOfShopp() {
         Swal.fire({
           position: 'top-end',
           title: 'Compra realizada',
-          text: `Se le notificará por el correo electrónico ${userMailLocal} la fecha y estimado horario de entrega. Recuerde que el pedido se abona en efectivo.`,
+          text: `Recuerde que el pedido se abona en efectivo.`,
           showConfirmButton: false,
           timer: 15000
         })
@@ -345,4 +345,7 @@ function endOfShopp() {
         )
       }
     })
+  logInSection.style.display = "flex"
+  divFormData.style.display = "none"
+  productForm.style.display = "none"
 }
